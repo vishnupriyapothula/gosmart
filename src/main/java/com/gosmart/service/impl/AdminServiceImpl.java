@@ -9,6 +9,7 @@ import com.gosmart.repository.AdminRepository;
 import com.gosmart.repository.entity.AdminEntity;
 import com.gosmart.service.AdminService;
 
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 /*
  * 
@@ -28,21 +29,52 @@ public class AdminServiceImpl implements AdminService {
 	 * @return AdminEntity This returns AdminDetails
 	 * */
 	@Override
-	public AdminEntity getAdmin(String adminEmailId, String adminPassword) {
+	public AdminEntity getAdmin(String adminEmailId, String adminPassword) 
+		{
 		log.info("{}-ServiceImpl  getAdmin() started",AdminConstants.ADMIN);
 		AdminEntity adminEntity=null;
 		try {
 			
 			adminEntity=repository.findByAdminEmailIdAndAdminPassWord(adminEmailId, adminPassword);
+			} 
+			catch (Exception e)
+			{
+				log.error("{}-ServiceImpl getAdmin()-{}",AdminConstants.ADMIN,e.getMessage());
+				throw new GoSmartException(e.getMessage());
+			}
+		return adminEntity;
+		}
+	
+	@Override
+	public AdminEntity getAdmin(String adminEmailId)
+	{
+		log.info("{}-ServiceImpl  getAdmin() started",AdminConstants.ADMIN);
+		AdminEntity adminEntity=null;
+			try 
+			{
+				
+				adminEntity=repository.findByAdminEmailId(adminEmailId);
+			}
+			
+			catch (Exception e) 
+			{
+				log.error("{}-ServiceImpl getAdmin()-{}",AdminConstants.ADMIN,e.getMessage());
+				throw new GoSmartException(e.getMessage());
+			}
+		
+		return adminEntity;
+		}
+
+	@Override
+	public void updateAdmin(AdminEntity adminEntity) {
+		try {
+			repository.save(adminEntity);
+			
 		} catch (Exception e) {
 			log.error("{}-ServiceImpl getAdmin()-{}",AdminConstants.ADMIN,e.getMessage());
 			throw new GoSmartException(e.getMessage());
 		}
 		
-		
-		
-		
-		return adminEntity;
 	}
 
 }

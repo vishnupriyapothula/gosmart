@@ -1,13 +1,13 @@
 package com.gosmart.service.impl;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gosmart.exception.GoSmartException;
@@ -30,6 +30,7 @@ public class AdminServiceImplTest {
 		when(repository.findByAdminEmailIdAndAdminPassWord(emailId,password)).thenReturn(adminEntity);
 		AdminEntity entity=service.getAdmin(emailId, password);
 		assertNotNull(entity);
+		
 	}
 	@Test(expected =GoSmartException.class)
 	public void testGetAdmin_Exception()throws Exception
@@ -40,5 +41,43 @@ public class AdminServiceImplTest {
 		service.getAdmin(emailId, password);
 		
 	}
+	@Test
+	public void testGetAdminByEmailId()throws Exception
+	{
+		String emailId="emailId";
+		AdminEntity adminEntity=new AdminEntity();
+		when(repository.findByAdminEmailId(emailId)).thenReturn(adminEntity);
+		AdminEntity entity=service.getAdmin(emailId);
+		assertNotNull(entity);
+	}
+	@Test(expected =GoSmartException.class)
+	public void testGetAdminByEmailId_Exception()throws Exception
+	{
+		String emailId="emailId";
+	
+		when(repository.findByAdminEmailId(emailId)).thenThrow(NullPointerException.class);
+		service.getAdmin(emailId);
+		
+	}
+	@Test
+	public void testUpdateAdmin()throws Exception
+	{
+		
+		AdminEntity adminEntity=new AdminEntity();
+		when(repository.save(adminEntity)).thenReturn(adminEntity);
+		service.updateAdmin(adminEntity);
+			assertTrue(true);
+	}
+	@Test(expected = GoSmartException.class)
+	public void testUpdateAdmin_Exception()throws Exception
+	{
+		
+		AdminEntity adminEntity=new AdminEntity();
+		when(repository.save(adminEntity)).thenThrow(NullPointerException.class);
+		service.updateAdmin(adminEntity);
+		
+	}
+	
+	
 	
 }
